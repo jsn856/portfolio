@@ -1,0 +1,122 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Pinecil Case — Jason Cheng</title>
+<meta name="description" content="Four iterations of a 3D-printed case for an open-source soldering iron — and a Fusion 360 refresher disguised as a project.">
+<link rel="stylesheet" href="/styles.css">
+<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🛠️</text></svg>">
+</head>
+<body>
+<a class="skip" href="#main">Skip to content</a>
+<header class="site-header">
+  <a class="site-name" href="/">Jason Cheng</a>
+  <nav>
+    <a href="/#projects">Projects</a>
+    <a href="/#photography">Photography</a>
+    <a href="mailto:jason@jasoncheng.io">Contact</a>
+  </nav>
+</header>
+<main id="main">
+<article class="project">
+  <div class="prose">
+    <p class="eyebrow">Project I · 2023</p>
+    <h1>Pinecil Case</h1>
+    <p class="lede">Four iterations of a 3D-printed case for an open-source soldering iron — and a Fusion 360 refresher disguised as a project.</p>
+    <ul class="tags"><li>Fusion 360</li><li>3D Printing</li><li>Design for Manufacture</li></ul>
+  </div>
+
+  <figure class="figure figure--hero"><picture><source type="image/avif" srcset="/images/pinecil/v4-finished-480.avif 480w, /images/pinecil/v4-finished-960.avif 960w, /images/pinecil/v4-finished-1440.avif 1440w, /images/pinecil/v4-finished-1920.avif 1920w" sizes="(min-width: 72rem) 68rem, 96vw"><source type="image/webp" srcset="/images/pinecil/v4-finished-480.webp 480w, /images/pinecil/v4-finished-960.webp 960w, /images/pinecil/v4-finished-1440.webp 1440w, /images/pinecil/v4-finished-1920.webp 1920w" sizes="(min-width: 72rem) 68rem, 96vw"><img src="/images/pinecil/v4-finished-1920.jpg" alt="Pinecil Case" width="1920" height="1440" loading="eager" decoding="async"></picture><figcaption>V4 — printed, with magnets, soldering iron, and USB-C adapter installed</figcaption></figure>
+
+  <div class="prose">
+    
+    <p>I had a fair bit of soldering to do at work. I couldn&#39;t solder though. I&#39;ve learned
+before, but never had a substantial amount of practice for the skill to cement into my
+brain. After a half day of practicing soldering a variety of SMTs (even some 0201s!) I
+actually found myself really enjoying the art. It was therapeutic. So, naturally, I go on
+Amazon to purchase a portable soldering iron because it was way cheaper than actual
+therapy. The weapon of choice was a Pinecil V2, made by Pine64, a hacker/maker brand that
+makes some interesting products, this open-source soldering iron being one of them. It
+arrived a few days later, and I decided it needed a case, and so I made one.</p>
+<h2 id="project-goals"><a class="anchor" href="#project-goals">Project goals</a></h2><ul>
+<li>Practice my CAD ability</li>
+<li>Make a small case for my new toy soldering iron</li>
+</ul>
+<p>Sitting down in front of a blank canvas is strange. Sometimes, I know exactly how to
+start, other times, I stare back at the screen, blankly. This time, its the latter. Let&#39;s
+see what others have done.</p>
+<p>Scanning through thingiverse.com and printables generated some very intriguing designs.
+There are some that integrate a
+<a href="https://www.printables.com/model/113494-multipart-pinecilts100-case" target="_blank" rel="noopener">mini all-in-one soldering station</a>,
+others that look like a <a href="https://www.thingiverse.com/thing:5136416" target="_blank" rel="noopener">pez dispenser</a>, all
+of which had an interesting element or two that I will shamelessly steal. Over a handful
+of iterations, you&#39;ll see that I end up using a few features of these.</p>
+<h2 id="v1-getting-reacquainted"><a class="anchor" href="#v1-getting-reacquainted">V1 — getting reacquainted</a></h2><p>This was a pretty simple case. The intent was quite literally to re-familiarize myself
+with working in Fusion 360 by making some basic shapes that loosely represent a case. I
+think I achieved that.</p>
+<p><figure class="figure figure--wide"><picture><source type="image/avif" srcset="/images/pinecil/v1-printed-480.avif 480w, /images/pinecil/v1-printed-960.avif 960w, /images/pinecil/v1-printed-1440.avif 1440w, /images/pinecil/v1-printed-1920.avif 1920w" sizes="(min-width: 56rem) 52rem, 92vw"><source type="image/webp" srcset="/images/pinecil/v1-printed-480.webp 480w, /images/pinecil/v1-printed-960.webp 960w, /images/pinecil/v1-printed-1440.webp 1440w, /images/pinecil/v1-printed-1920.webp 1920w" sizes="(min-width: 56rem) 52rem, 92vw"><img src="/images/pinecil/v1-printed-1920.jpg" alt="V1 of the Pinecil case, printed in nylon" width="1920" height="1440" loading="lazy" decoding="async"></picture><figcaption>V1 — printed in nylon</figcaption></figure></p>
+<h2 id="v2-too-many-features"><a class="anchor" href="#v2-too-many-features">V2 — too many features</a></h2><p>Obtaining the upmost confidence by doing the absolute basics in V0.1, I felt ready to move
+onto a feature-filled case. In this version, I wanted to be able to fit the entire
+soldering iron inside without needing to remove the tip for it to fit. I also wanted a
+slot to be able to store the 6ft USB-C cable I use to provide power. I attempted to modify
+the step file from the all-in-one case, however, I found that incredibly difficult and
+non-intuitive. I kept running into errors that indicated certain features I wanted to cut
+were impossible due to the feature being undefined, or a math modeling error. For the most
+part, I was able to find workarounds for everything and in the end, I got most of my model
+made, including the pillars to wrap the cable around. You&#39;ll notice that there are some
+interior edges that look out of place, and a fair bit of inconsistent fillet dimensioning.
+You may also notice that up to this point, I have not designed a lid, but I had an idea to
+insert magnets into it for a magnetic latch. That piece will come later. Regardless, I
+eventually called it &quot;good enough&quot; and sent it to the printer.</p>
+<p><figure class="figure figure--wide"><picture><source type="image/avif" srcset="/images/pinecil/v2-model-480.avif 480w, /images/pinecil/v2-model-960.avif 960w, /images/pinecil/v2-model-1440.avif 1440w, /images/pinecil/v2-model-1920.avif 1920w" sizes="(min-width: 56rem) 52rem, 92vw"><source type="image/webp" srcset="/images/pinecil/v2-model-480.webp 480w, /images/pinecil/v2-model-960.webp 960w, /images/pinecil/v2-model-1440.webp 1440w, /images/pinecil/v2-model-1920.webp 1920w" sizes="(min-width: 56rem) 52rem, 92vw"><img src="/images/pinecil/v2-model-1920.jpg" alt="Top view of the V2 model in Fusion 360" width="1920" height="1079" loading="lazy" decoding="async"></picture><figcaption>V2 — model</figcaption></figure></p>
+<p>The print came out nicely, and I&#39;m beginning to realize that some dimensions, such as the
+aforementioned fillets, aren&#39;t very pronounced. Unfortunately, one look at it made me
+realize that there wasn&#39;t nearly enough room to spool 6ft of cable around the pillars. I
+tried it anyway, but the result matched my new assumption. Oh well.</p>
+<h2 id="v3-back-to-basics-wrong-height"><a class="anchor" href="#v3-back-to-basics-wrong-height">V3 — back to basics, wrong height</a></h2><p>By now, my thought was to go back to basics; slim it back down, ditch the cable storage,
+and design the magnetic lid. So that&#39;s pretty much what I did. However, I was still using
+the step file I imported from thingiverse, so I was still running into issues during this
+design. In the end, it was fairly simple, I hit print, and assumed that this would
+probably be my last version. You&#39;ll see from the picture, that I somehow completely
+neglected or changed the height of the case. What a dummy… I couldn&#39;t help but laugh.</p>
+<figure class="figure figure--wide">
+  <div class="gallery gallery--2"><picture><source type="image/avif" srcset="/images/pinecil/v3-printed-480.avif 480w, /images/pinecil/v3-printed-960.avif 960w, /images/pinecil/v3-printed-1440.avif 1440w" sizes="(min-width: 56rem) 26rem, 92vw"><source type="image/webp" srcset="/images/pinecil/v3-printed-480.webp 480w, /images/pinecil/v3-printed-960.webp 960w, /images/pinecil/v3-printed-1440.webp 1440w" sizes="(min-width: 56rem) 26rem, 92vw"><img src="/images/pinecil/v3-printed-1440.jpg" alt="" width="1440" height="552" loading="lazy" decoding="async"></picture><picture><source type="image/avif" srcset="/images/pinecil/v3-side-profile-480.avif 480w, /images/pinecil/v3-side-profile-960.avif 960w, /images/pinecil/v3-side-profile-1440.avif 1440w" sizes="(min-width: 56rem) 26rem, 92vw"><source type="image/webp" srcset="/images/pinecil/v3-side-profile-480.webp 480w, /images/pinecil/v3-side-profile-960.webp 960w, /images/pinecil/v3-side-profile-1440.webp 1440w" sizes="(min-width: 56rem) 26rem, 92vw"><img src="/images/pinecil/v3-side-profile-1440.jpg" alt="" width="1440" height="348" loading="lazy" decoding="async"></picture></div>
+  <figcaption>V3 — printed. Bottom picture highlighting the height mismatch.</figcaption>
+</figure><p>But on the bright side, I got to practice putting the magnets in, which were particularly
+tricky to handle. But during this, I noticed that the lid wasn&#39;t reversible due to the
+position of the magnets. Not that it needed to be, but frankly, that would be a nice
+touch. I noted that for the next design.</p>
+<h2 id="v4-from-scratch"><a class="anchor" href="#v4-from-scratch">V4 — from scratch</a></h2><p>Okay, this is definitely going to be my last version, right? Unlike V3, I designed this
+one from scratch. Almost. I learned how to extract a portion of a step file, and I used
+this newly learnt skill to take the snug-fit cradle from the old design and keep begin to
+design around that. The rest of the case was built from the ground up. By doing this, I
+was able to learn the intricacies of drawing planes, filleting, and the sweep tool, which
+I used to create a inward-slanted bevel. I just thought it looked nice on the other model,
+so I copied this too. I removed the extraneous bits and bobs and repositioned the magnet
+slots to make lid reversible. I also ended up adding a small L-shaped extrusion to hold my
+USB-C 90* adapter in there. Measuring everything with my micrometer, I found there was
+just enough space for it to fit. Its probably not the best spot for it, but hey, it fits.
+3… 2… 1… Print!</p>
+<p><figure class="figure figure--wide"><picture><source type="image/avif" srcset="/images/pinecil/v4-detail-480.avif 480w, /images/pinecil/v4-detail-960.avif 960w, /images/pinecil/v4-detail-1440.avif 1440w, /images/pinecil/v4-detail-1920.avif 1920w" sizes="(min-width: 56rem) 52rem, 92vw"><source type="image/webp" srcset="/images/pinecil/v4-detail-480.webp 480w, /images/pinecil/v4-detail-960.webp 960w, /images/pinecil/v4-detail-1440.webp 1440w, /images/pinecil/v4-detail-1920.webp 1920w" sizes="(min-width: 56rem) 52rem, 92vw"><img src="/images/pinecil/v4-detail-1920.jpg" alt="The finished V4 case" width="1920" height="1440" loading="lazy" decoding="async"></picture><figcaption>V4 — everything fits</figcaption></figure></p>
+<p>It came out rather nicely! Everything fit snugly and despite dropping the third magnet,
+the lid holds quite well! Although I have some last critiques and thoughts, I was ready to
+call this one done. If I were to do one more revision, I would probably add a little more
+room for the USB-C adapter, and add some protection around the tip to prevent any unaware
+fingers from touching a potentially scalding hot iron.</p>
+<h2 id="takeaways"><a class="anchor" href="#takeaways">Takeaways</a></h2><p>Overall, I enjoyed this project. When my Pinecil soldering iron came, I thought it was kind
+of cheap to not include a case, but I&#39;m glad they didn&#39;t. I like that I was able to to
+learn more about CAD modeling by doing something that actually added value, as opposed to
+creating arbitrary objects. The case turned out great too. Its sturdy enough to chuck into
+my backpack without the lid coming off and quite slim such that it doesn&#39;t take up too much
+space in wherever it ends up being stored. Thanks for reading, nerds.</p>
+
+    <div class="files"><h2 id="files">Files</h2><a class="filelink" href="#">Printables File</a></div>
+  </div>
+</article>
+</main>
+<footer class="site-footer">
+  <p>Jason Cheng · <a href="mailto:jason@jasoncheng.io">jason@jasoncheng.io</a></p>
+</footer>
+</body>
+</html>
