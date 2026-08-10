@@ -1,0 +1,65 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Gridlet — Jason Cheng</title>
+<meta name="description" content="A daily crossword for iOS. SwiftUI app, Node generator, a 103,128-word clue bank rated through the Anthropic Batch API, and encrypted puzzle delivery.">
+<meta name="robots" content="noindex, nofollow">
+<link rel="stylesheet" href="/styles.css">
+<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🛠️</text></svg>">
+</head>
+<body>
+<a class="skip" href="#main">Skip to content</a>
+<header class="site-header">
+  <a class="site-name" href="/">Jason Cheng</a>
+  <nav><a href="/work/">Work</a><a href="/projects/" aria-current="page">Projects</a><a href="/photography/">Photography</a><a href="mailto:jason@jasoncheng.io">Contact</a></nav>
+</header>
+<main id="main">
+<article class="item">
+  <div class="prose">
+    <a class="back" href="/projects/">Projects</a>
+    <h1>Gridlet</h1>
+    <p class="lede">A daily crossword for iOS. SwiftUI app, Node generator, a 103,128-word clue bank rated through the Anthropic Batch API, and encrypted puzzle delivery.</p>
+    <p class="eyebrow">2026</p>
+    <ul class="tags"><li>iOS</li><li>SwiftUI</li><li>Node.js</li></ul>
+  </div>
+
+  <figure class="figure figure--hero"><div class="ph"><span>Gridlet</span></div><figcaption>Gridlet on iOS.</figcaption></figure>
+
+  <div class="prose">
+    <p class="notice">This case study is still an outline — the facts below are verified, the writing isn't finished.</p>
+    
+    <h2 id="the-product"><a class="anchor" href="#the-product">The product</a></h2><p>Daily crosswords for iOS. Minis most days at 5×5, 6×6 and 7×7, with midis on a fixed
+cadence: 9×9 on Sundays, 10×10 on Wednesdays. The whole schedule runs a repeating 14-day
+cycle.</p>
+<p>Daily puzzles stay free. No ads, no accounts, no data collection.</p>
+<h2 id="the-pipeline"><a class="anchor" href="#the-pipeline">The pipeline</a></h2><p>A Node generator builds the puzzles, with separate difficulty thresholds and weights for
+minis and midis. Mini thresholds break midi generation outright, because longer words
+change what counts as hard.</p>
+<p>Puzzles move through <code>pzlRaw</code> for unencrypted review, then <code>pzlStaged</code>, then <code>pzlRelease</code>,
+where I encrypt them with AES-256-GCM and strip the filenames. The app fetches them as
+encrypted JSON and decrypts with CryptoKit.</p>
+<h2 id="the-clue-bank"><a class="anchor" href="#the-clue-bank">The clue bank</a></h2><p>103,128 words, 99.86% of them rated, scored through the Anthropic Batch API. Two
+independent scales: <code>answerDifficulty</code> for how familiar the answer is, and a separate clue
+difficulty for how tricky the wording is. Answer difficulty drives the schedule.</p>
+<p>147 words are still unrated.</p>
+<h2 id="the-tools-i-had-to-build-first"><a class="anchor" href="#the-tools-i-had-to-build-first">The tools I had to build first</a></h2><p>None of the above is inspectable by hand at that scale, so the generator came with a
+browser-based puzzle editor for swapping and rating clues, a clue bank reviewer, a viewer
+that reads both encrypted and raw JSON, and a command builder that wraps the generator CLI
+flags.</p>
+<h2 id="where-it-stands"><a class="anchor" href="#where-it-stands">Where it stands</a></h2><p>TestFlight build uploaded, privacy policy live, store description drafted, pre-submission
+checklist worked. The iOS 26 SDK requirement is what sets the timing on submission.</p>
+<p>Next up: a StoreKit tip jar, a Gridlet+ tier covering the archive and extended stats, and a
+streak-based share.</p>
+
+    
+  </div>
+</article>
+</main>
+<footer class="site-footer">
+  <p><a href="mailto:jason@jasoncheng.io">jason@jasoncheng.io</a></p>
+  <p>Jason Cheng · Irvine, California</p>
+</footer>
+</body>
+</html>

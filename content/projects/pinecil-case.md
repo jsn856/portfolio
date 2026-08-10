@@ -1,8 +1,8 @@
 ---
 title: "Pinecil Case"
 subtitle: "Four iterations of a 3D-printed case for an open-source soldering iron — and a Fusion 360 refresher disguised as a project."
-number: "Project I"
 year: "2023"
+order: 3
 tags: ["Fusion 360", "3D Printing", "Design for Manufacture"]
 hero: "images/pinecil/v4-finished.jpg"
 heroCaption: "V4 — printed, with magnets, soldering iron, and USB-C adapter installed"
@@ -117,3 +117,13 @@ learn more about CAD modeling by doing something that actually added value, as o
 creating arbitrary objects. The case turned out great too. Its sturdy enough to chuck into
 my backpack without the lid coming off and quite slim such that it doesn't take up too much
 space in wherever it ends up being stored. Thanks for reading, nerds.
+
+## What came next
+
+*Added later, and not part of the original write-up.*
+
+I could not solder at all before this. Learning it at work is what put a Pinecil in my
+hands, and this case is what came of that. After it came a
+[fume extractor](/projects/fume-extractor/), once I was soldering enough for the smoke to
+matter, and then a [split keyboard](/projects/split-keyboard/) with a few hundred joints in
+it.
