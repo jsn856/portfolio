@@ -1,5 +1,9 @@
 node_modules/
 
+# Claude Code project context — kept out of this public repo intentionally.
+CLAUDE.md
+CLAUDE.local.md
+
 # Large photo originals, if you ever stage them inside the repo instead of
 # pointing PHOTO_ORIGINALS at an external drive. Derivatives in dist/ are what
 # actually get committed and served.
