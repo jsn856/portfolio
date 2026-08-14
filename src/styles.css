@@ -370,6 +370,20 @@ figcaption {
   margin-top: .7rem;
 }
 
+/* Inlined SVG from @diagram. The SVG carries no colors of its own; it paints in
+   currentColor and the vars below, so one file serves both light and dark. */
+.diagram {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 3px;
+  padding: clamp(1rem, 3vw, 2rem);
+  color: var(--text);
+  overflow-x: auto;
+}
+/* Below this the labels stop being readable, so scroll the container instead
+   of shrinking the type into nothing. */
+.diagram svg { display: block; width: 100%; min-width: 34rem; height: auto; }
+
 .gallery { display: grid; gap: .75rem; grid-template-columns: 1fr; }
 @media (min-width: 40rem) {
   .gallery--2 { grid-template-columns: 1fr 1fr; }

@@ -1,0 +1,56 @@
+<svg viewBox="0 0 880 540" xmlns="http://www.w3.org/2000/svg" role="img"
+     aria-label="The architecture planned in March: an iOS app talking over HTTPS to a REST API with a CDN cache, Sign in with Apple and a leaderboard; the API reading from a Supabase or Firebase puzzle database; and a daily cron pipeline writing generated puzzles into that same database.">
+  <style>
+    .dg-box   { fill: var(--surface); stroke: var(--border); stroke-width: 1.5; }
+    .dg-eyebrow { font: 600 10.5px var(--sans); fill: var(--faint); letter-spacing: .09em; }
+    .dg-title { font: 600 17px var(--sans); fill: var(--text); }
+    .dg-line  { font: 400 13px var(--sans); fill: var(--muted); }
+    .dg-edge  { stroke: var(--faint); stroke-width: 1.5; fill: none; }
+    .dg-edgelabel { font: 400 11.5px var(--sans); fill: var(--faint); }
+  </style>
+
+  <defs>
+    <marker id="gp-end" viewBox="0 0 10 10" refX="9" refY="5"
+            markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+      <path d="M 0 0 L 10 5 L 0 10 z" fill="var(--faint)"/>
+    </marker>
+  </defs>
+
+  <!-- client -->
+  <rect class="dg-box" x="40" y="44" width="330" height="176" rx="4"/>
+  <text class="dg-eyebrow" x="62" y="76">CLIENT</text>
+  <text class="dg-title"   x="62" y="101">iOS App</text>
+  <text class="dg-line"    x="62" y="130">Puzzle UI. Grid, clues, timer.</text>
+  <text class="dg-line"    x="62" y="152">Input handler</text>
+  <text class="dg-line"    x="62" y="174">Share sheet</text>
+  <text class="dg-line"    x="62" y="196">Local storage (SwiftData)</text>
+
+  <!-- backend -->
+  <rect class="dg-box" x="510" y="44" width="330" height="176" rx="4"/>
+  <text class="dg-eyebrow" x="532" y="76">BACKEND</text>
+  <text class="dg-title"   x="532" y="101">REST API</text>
+  <text class="dg-line"    x="532" y="130">/puzzle/today, /puzzle/{date}</text>
+  <text class="dg-line"    x="532" y="152">CDN cache, 24 hours</text>
+  <text class="dg-line"    x="532" y="174">Sign in with Apple (optional)</text>
+  <text class="dg-line"    x="532" y="196">Leaderboard</text>
+
+  <!-- client <-> backend -->
+  <line class="dg-edge" x1="374" y1="132" x2="506" y2="132"
+        marker-start="url(#gp-end)" marker-end="url(#gp-end)"/>
+  <text class="dg-edgelabel" x="440" y="121" text-anchor="middle">HTTPS</text>
+
+  <!-- storage -->
+  <rect class="dg-box" x="510" y="286" width="330" height="86" rx="4"/>
+  <text class="dg-eyebrow" x="532" y="313">STORAGE</text>
+  <text class="dg-title"   x="532" y="338">Puzzle DB</text>
+  <text class="dg-line"    x="532" y="359">Supabase / Firebase</text>
+
+  <line class="dg-edge" x1="620" y1="222" x2="620" y2="282" marker-end="url(#gp-end)"/>
+
+  <!-- pipeline -->
+  <rect class="dg-box" x="40" y="430" width="800" height="76" rx="4"/>
+  <text class="dg-eyebrow" x="62" y="457">PIPELINE, DAILY CRON</text>
+  <text class="dg-line"    x="62" y="486">Word and clue DB  →  Generator  →  Validator  →  Publish</text>
+
+  <line class="dg-edge" x1="730" y1="426" x2="730" y2="376" marker-end="url(#gp-end)"/>
+</svg>

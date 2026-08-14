@@ -1,0 +1,45 @@
+<svg viewBox="0 0 880 240" xmlns="http://www.w3.org/2000/svg" role="img"
+     aria-label="The architecture that shipped: a Node generator on a local machine writes encrypted JSON, a git push sends it to GitHub Pages which serves it as static files, and the iOS app fetches, decrypts and caches it. No API, no database, no authentication.">
+  <style>
+    .dg-box   { fill: var(--surface); stroke: var(--border); stroke-width: 1.5; }
+    .dg-eyebrow { font: 600 10.5px var(--sans); fill: var(--faint); letter-spacing: .09em; }
+    .dg-title { font: 600 17px var(--sans); fill: var(--text); }
+    .dg-line  { font: 400 13px var(--sans); fill: var(--muted); }
+    .dg-edge  { stroke: var(--faint); stroke-width: 1.5; fill: none; }
+    .dg-edgelabel { font: 400 11.5px var(--sans); fill: var(--faint); }
+  </style>
+
+  <defs>
+    <marker id="ga-end" viewBox="0 0 10 10" refX="9" refY="5"
+            markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+      <path d="M 0 0 L 10 5 L 0 10 z" fill="var(--faint)"/>
+    </marker>
+  </defs>
+
+  <rect class="dg-box" x="20" y="40" width="248" height="152" rx="4"/>
+  <text class="dg-eyebrow" x="42" y="72">MY DESK</text>
+  <text class="dg-title"   x="42" y="97">Generator</text>
+  <text class="dg-line"    x="42" y="126">Node. Clue bank in,</text>
+  <text class="dg-line"    x="42" y="148">solver, AES out.</text>
+  <text class="dg-line"    x="42" y="170">Encrypted JSON files.</text>
+
+  <line class="dg-edge" x1="272" y1="116" x2="312" y2="116" marker-end="url(#ga-end)"/>
+  <text class="dg-edgelabel" x="292" y="104" text-anchor="middle">push</text>
+
+  <rect class="dg-box" x="316" y="40" width="248" height="152" rx="4"/>
+  <text class="dg-eyebrow" x="338" y="72">HOSTING</text>
+  <text class="dg-title"   x="338" y="97">GitHub Pages</text>
+  <text class="dg-line"    x="338" y="126">Static files on a</text>
+  <text class="dg-line"    x="338" y="148">branch. Nothing</text>
+  <text class="dg-line"    x="338" y="170">running.</text>
+
+  <line class="dg-edge" x1="568" y1="116" x2="608" y2="116" marker-end="url(#ga-end)"/>
+  <text class="dg-edgelabel" x="588" y="104" text-anchor="middle">fetch</text>
+
+  <rect class="dg-box" x="612" y="40" width="248" height="152" rx="4"/>
+  <text class="dg-eyebrow" x="634" y="72">CLIENT</text>
+  <text class="dg-title"   x="634" y="97">iOS App</text>
+  <text class="dg-line"    x="634" y="126">Decrypt with CryptoKit,</text>
+  <text class="dg-line"    x="634" y="148">cache, render. Stats</text>
+  <text class="dg-line"    x="634" y="170">stay in iCloud.</text>
+</svg>

@@ -18,6 +18,7 @@
  *   ![alt](path "caption")                    -> <figure> with a caption
  *   @gallery a.jpg, b.jpg | shared caption    -> side-by-side figure
  *   @model <url> | caption                    -> responsive embedded iframe
+ *   @diagram path.svg | caption               -> SVG inlined verbatim, no raster ladder
  *
  * Every local image is resized into a 480/960/1440/1920 ladder in AVIF and
  * WebP with a JPEG fallback, emitted as <picture> with srcset. That is the one
@@ -25,7 +26,7 @@
  */
 
 import { readFile, writeFile, mkdir, rm, readdir, copyFile } from 'node:fs/promises';
-import { existsSync } from 'node:fs';
+import { existsSync, readFileSync } from 'node:fs';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
 import matter from 'gray-matter';
@@ -170,7 +171,38 @@ function collectImages(md, front) {
   return [...found];
 }
 
+/**
+ * Inline an SVG instead of sending it through the raster ladder.
+ *
+ * Diagrams are the one image type where sharp is the wrong tool. Rasterizing a
+ * diagram costs the crispness at every zoom level, and worse, it bakes in one
+ * set of colors. Inlined, the SVG draws itself in var(--text) and var(--accent)
+ * and follows the page into dark mode for free.
+ */
+function inlineDiagram(relPath, caption) {
+  const abs = IMAGE_SOURCES.map((root) => path.join(root, relPath)).find(existsSync);
+  if (!abs) {
+    console.warn(`  ! missing diagram: ${relPath}  (placeholder rendered)`);
+    const named = path.basename(relPath, path.extname(relPath)).replace(/[-_]/g, ' ');
+    return `<figure class="figure figure--wide"><div class="ph"><span>${esc(named)}</span></div>${
+      caption ? `<figcaption>${esc(caption)}</figcaption>` : ''
+    }</figure>`;
+  }
+  // Strip the XML prolog and any doctype. Both are illegal inline in HTML.
+  const svg = readFileSync(abs, 'utf8')
+    .replace(/<\?xml[^>]*\?>/g, '')
+    .replace(/<!DOCTYPE[^>]*>/gi, '')
+    .trim();
+  return `<figure class="figure figure--wide">
+  <div class="diagram">${svg}</div>
+  ${caption ? `<figcaption>${esc(caption)}</figcaption>` : ''}
+</figure>`;
+}
+
 function expandDirectives(md, manifest) {
+  md = md.replace(/^@diagram\s+(\S+)\s*(?:\|\s*(.*))?$/gm, (_, src, caption) =>
+    inlineDiagram(src, caption ? caption.trim() : ''));
+
   md = md.replace(/^@model\s+(\S+)\s*(?:\|\s*(.*))?$/gm, (_, url, caption) => `<figure class="figure figure--wide">
   <div class="embed">
     <iframe src="${esc(url)}" allowfullscreen loading="lazy" title="${esc(caption || 'Embedded 3D model')}"></iframe>

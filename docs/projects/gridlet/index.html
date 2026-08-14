@@ -4,7 +4,7 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Gridlet — Jason Cheng</title>
-<meta name="description" content="A daily crossword for iOS. SwiftUI app, Node generator, a 103,128-word clue bank rated through the Anthropic Batch API, and encrypted puzzle delivery.">
+<meta name="description" content="My wife and I lost our daily crossword to a paywall. Four months later I had a word bank, a puzzle generator and an iOS app in review, and I still cannot write a line of Swift.">
 <meta name="robots" content="noindex, nofollow">
 <link rel="stylesheet" href="/styles.css">
 <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🛠️</text></svg>">
@@ -20,7 +20,7 @@
   <div class="prose">
     <a class="back" href="/projects/">Projects</a>
     <h1>Gridlet</h1>
-    <p class="lede">A daily crossword for iOS. SwiftUI app, Node generator, a 103,128-word clue bank rated through the Anthropic Batch API, and encrypted puzzle delivery.</p>
+    <p class="lede">My wife and I lost our daily crossword to a paywall. Four months later I had a word bank, a puzzle generator and an iOS app in review, and I still cannot write a line of Swift.</p>
     <p class="eyebrow">2026</p>
     <ul class="tags"><li>iOS</li><li>SwiftUI</li><li>Node.js</li></ul>
   </div>
@@ -28,30 +28,253 @@
   <figure class="figure figure--hero"><div class="ph"><span>Gridlet</span></div><figcaption>Gridlet on iOS.</figcaption></figure>
 
   <div class="prose">
-    <p class="notice">This case study is still an outline — the facts below are verified, the writing isn't finished.</p>
     
-    <h2 id="the-product"><a class="anchor" href="#the-product">The product</a></h2><p>Daily crosswords for iOS. Minis most days at 5×5, 6×6 and 7×7, with midis on a fixed
-cadence: 9×9 on Sundays, 10×10 on Wednesdays. The whole schedule runs a repeating 14-day
-cycle.</p>
-<p>Daily puzzles stay free. No ads, no accounts, no data collection.</p>
-<h2 id="the-pipeline"><a class="anchor" href="#the-pipeline">The pipeline</a></h2><p>A Node generator builds the puzzles, with separate difficulty thresholds and weights for
-minis and midis. Mini thresholds break midi generation outright, because longer words
-change what counts as hard.</p>
-<p>Puzzles move through <code>pzlRaw</code> for unencrypted review, then <code>pzlStaged</code>, then <code>pzlRelease</code>,
-where I encrypt them with AES-256-GCM and strip the filenames. The app fetches them as
-encrypted JSON and decrypts with CryptoKit.</p>
-<h2 id="the-clue-bank"><a class="anchor" href="#the-clue-bank">The clue bank</a></h2><p>103,128 words, 99.86% of them rated, scored through the Anthropic Batch API. Two
-independent scales: <code>answerDifficulty</code> for how familiar the answer is, and a separate clue
-difficulty for how tricky the wording is. Answer difficulty drives the schedule.</p>
-<p>147 words are still unrated.</p>
-<h2 id="the-tools-i-had-to-build-first"><a class="anchor" href="#the-tools-i-had-to-build-first">The tools I had to build first</a></h2><p>None of the above is inspectable by hand at that scale, so the generator came with a
-browser-based puzzle editor for swapping and rating clues, a clue bank reviewer, a viewer
-that reads both encrypted and raw JSON, and a command builder that wraps the generator CLI
-flags.</p>
-<h2 id="where-it-stands"><a class="anchor" href="#where-it-stands">Where it stands</a></h2><p>TestFlight build uploaded, privacy policy live, store description drafted, pre-submission
-checklist worked. The iOS 26 SDK requirement is what sets the timing on submission.</p>
-<p>Next up: a StoreKit tip jar, a Gridlet+ tier covering the archive and extended stats, and a
-streak-based share.</p>
+    
+    <p>My wife and I played the New York Times mini crossword every day. It was a small thing. She
+would send me her time, I would send her mine, and hers was almost always faster. Not by a
+little.</p>
+<p>In August 2025 the Times moved the mini behind the paywall, and that was the end of it.</p>
+<p>I figured I would forget about it in a week. Months later I was still annoyed. The puzzle
+itself was maybe four minutes of my day. What I missed was the part after, the two of us
+comparing times, which had turned into one of the more dependable things we did together
+without either of us deciding it would be.</p>
+<p>Then sometime last winter I had the thought that got me here. I bet I could build a better
+one.</p>
+<p>That is a petty reason to start a project and I am aware of it. But I had been looking for
+an excuse to build something end to end, and this one came with a user base of two people I
+already knew.</p>
+<h2 id="what-i-thought-i-was-building"><a class="anchor" href="#what-i-thought-i-was-building">What I thought I was building</a></h2><p>In late March I sat down with Claude and started working out what this would actually take.
+That conversation ran about a week. Not a week of work. A week of thinking out loud, going
+away, coming back with a new objection, and picking it apart again.</p>
+<p>What came out of it was a design spec, a build plan, and the first real artifact of the
+project.</p>
+<figure class="figure figure--wide">
+  <div class="diagram"><svg viewBox="0 0 880 540" xmlns="http://www.w3.org/2000/svg" role="img"
+     aria-label="The architecture planned in March: an iOS app talking over HTTPS to a REST API with a CDN cache, Sign in with Apple and a leaderboard; the API reading from a Supabase or Firebase puzzle database; and a daily cron pipeline writing generated puzzles into that same database.">
+  <style>
+    .dg-box   { fill: var(--surface); stroke: var(--border); stroke-width: 1.5; }
+    .dg-eyebrow { font: 600 10.5px var(--sans); fill: var(--faint); letter-spacing: .09em; }
+    .dg-title { font: 600 17px var(--sans); fill: var(--text); }
+    .dg-line  { font: 400 13px var(--sans); fill: var(--muted); }
+    .dg-edge  { stroke: var(--faint); stroke-width: 1.5; fill: none; }
+    .dg-edgelabel { font: 400 11.5px var(--sans); fill: var(--faint); }
+  </style>  <defs>
+    <marker id="gp-end" viewBox="0 0 10 10" refX="9" refY="5"
+            markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+      <path d="M 0 0 L 10 5 L 0 10 z" fill="var(--faint)"/>
+    </marker>
+  </defs>  <!-- client -->
+  <rect class="dg-box" x="40" y="44" width="330" height="176" rx="4"/>
+  <text class="dg-eyebrow" x="62" y="76">CLIENT</text>
+  <text class="dg-title"   x="62" y="101">iOS App</text>
+  <text class="dg-line"    x="62" y="130">Puzzle UI. Grid, clues, timer.</text>
+  <text class="dg-line"    x="62" y="152">Input handler</text>
+  <text class="dg-line"    x="62" y="174">Share sheet</text>
+  <text class="dg-line"    x="62" y="196">Local storage (SwiftData)</text>  <!-- backend -->
+  <rect class="dg-box" x="510" y="44" width="330" height="176" rx="4"/>
+  <text class="dg-eyebrow" x="532" y="76">BACKEND</text>
+  <text class="dg-title"   x="532" y="101">REST API</text>
+  <text class="dg-line"    x="532" y="130">/puzzle/today, /puzzle/{date}</text>
+  <text class="dg-line"    x="532" y="152">CDN cache, 24 hours</text>
+  <text class="dg-line"    x="532" y="174">Sign in with Apple (optional)</text>
+  <text class="dg-line"    x="532" y="196">Leaderboard</text>  <!-- client <-> backend -->
+<p>  <line class="dg-edge" x1="374" y1="132" x2="506" y2="132"
+        marker-start="url(#gp-end)" marker-end="url(#gp-end)"/>
+  <text class="dg-edgelabel" x="440" y="121" text-anchor="middle">HTTPS</text></p>
+  <!-- storage -->
+  <rect class="dg-box" x="510" y="286" width="330" height="86" rx="4"/>
+  <text class="dg-eyebrow" x="532" y="313">STORAGE</text>
+  <text class="dg-title"   x="532" y="338">Puzzle DB</text>
+  <text class="dg-line"    x="532" y="359">Supabase / Firebase</text>  <line class="dg-edge" x1="620" y1="222" x2="620" y2="282" marker-end="url(#gp-end)"/>  <!-- pipeline -->
+  <rect class="dg-box" x="40" y="430" width="800" height="76" rx="4"/>
+  <text class="dg-eyebrow" x="62" y="457">PIPELINE, DAILY CRON</text>
+  <text class="dg-line"    x="62" y="486">Word and clue DB  →  Generator  →  Validator  →  Publish</text>  <line class="dg-edge" x1="730" y1="426" x2="730" y2="376" marker-end="url(#gp-end)"/>
+</svg></div>
+  <figcaption>The architecture I drew in March, before any of it existed.</figcaption>
+</figure><p>I still like this diagram, mostly because of how wrong it is.</p>
+<p>It has a REST API, a puzzle database using Supabase or Firebase. It has Sign in with Apple,
+marked optional, which is the tell of someone who has not thought about it. It has a
+leaderboard. It has a cron job publishing a puzzle every morning.</p>
+<p>I was drawing the system I assumed a daily puzzle app had to be, because that is what daily
+puzzle apps look like from the outside. Almost none of it survived.</p>
+<p>What the plan did get right was the shape of the work. Four things had to exist, and each one
+fed the next. A bank of words and clues. A program to turn that bank into puzzles. Somewhere
+to put the puzzles. An app to play them in.</p>
+<p>Here is the part I should put up front, because it changes how the rest of this reads. I did
+not write any code. Not one line. I do not know Swift and I do not know JavaScript, and
+after four months of this I still don&#39;t. Every line of the generator, the browser tools and
+the app came out of Claude.</p>
+<p>What I did was decide what the thing should feel like, which of two approaches to take, what
+was wrong with whatever came back, and when something that ran correctly was still the wrong
+answer. There was an enormous amount of back and forth. That back and forth is most of what
+this project actually was.</p>
+<h2 id="nobody-wants-acetyl-at-seven-in-the-morning"><a class="anchor" href="#nobody-wants-acetyl-at-seven-in-the-morning">Nobody wants ACETYL at seven in the morning</a></h2><p>The word bank came first, since nothing downstream works without it. I went looking for
+sources and turned up an open word list and a dataset of historical crossword clues. Claude
+wrote the script that merged them into one JSON file keyed by answer.</p>
+<p>Then I ran the generator for the first time and got a grid full of words like ELAN, VAPID and
+ACETYL.</p>
+<p>Technically valid. Genuinely a crossword. Also miserable to solve before coffee.</p>
+<p>The explanation was easy enough to get. A solver treats every word in the bank as equally
+acceptable, so it fills the grid with whatever satisfies the constraints, and rare words
+satisfy constraints beautifully. They are full of unusual letters, which makes crossings
+easier to find. Nothing was malfunctioning. The generator was doing exactly what it had been
+asked to do, and I was the one who had asked for the wrong thing.</p>
+<p>Noticing it was a problem at all is the part that was mine. A grid full of ACETYL and ELAN is
+a correct crossword. It is only a bad one if you know who is going to be sitting there at
+seven in the morning trying to solve it.</p>
+<p>So the bank needed a difficulty rating, and difficulty turned out to be two separate
+questions.</p>
+<p>The first one is how obscure the word is. That came from SUBTLEX-US, a corpus built out of
+the subtitles of 8,388 films and television episodes, about 51 million words of American
+dialogue, counted by how often each word turns up. If you have heard a word out loud, it
+scores well. BEACH, CITY and EVER sit near the top. VAPID and ACETYL do not.</p>
+<p>The second question is harder. How tricky is the clue? A plain word can carry a devious clue
+and a rare word can carry a flat one, so knowing the word tells you nothing about the clue
+attached to it. There is no corpus for that. So I ran the whole bank through Anthropic&#39;s
+Batch API and had a model rate every clue on misdirection, wordplay, indirectness and the
+knowledge it assumes, anchored to the NYT convention where a 1 is a Monday and a 5 is a
+Saturday.</p>
+<p>Before committing to the full run I tested Haiku and Sonnet against the same 500 words. On
+word difficulty they agreed, but on clues they did not. The example that decided it was
+ACAPULCO, clued as &quot;Place with many dives in Mexico.&quot; Haiku read &quot;dives&quot; as diving and rated
+it a 1. Sonnet caught the second meaning, rated it a 4, and was right. Haiku also dropped
+clues out of its output more often, 29 mismatches against Sonnet&#39;s 2.</p>
+<p>I paid for Sonnet.</p>
+<p>The finished bank is 103,128 words carrying about a dozen clues each.</p>
+<h2 id="arguing-with-robots"><a class="anchor" href="#arguing-with-robots">Arguing with robots</a></h2><p>The generator is a single Node script, somewhere north of seventeen hundred lines, and I
+could not have written ten of them. It picks a black square pattern for the grid size, finds
+every across and down run of three or more cells, and fills them by backtracking.</p>
+<p>Backtracking is what you already do on a crossword when you are being stubborn about it. Put
+a word in. Try to put a crossing word in. If nothing fits, pull the first word back out, try
+a different one, and go again. The computer does the same thing a few hundred thousand times
+without getting bored or attached to any of its guesses.</p>
+<p>There are two things that keep that from taking all day. It always fills the most constrained
+slot first, so it runs into the hard part of the grid early instead of discovering it after
+twenty successful placements. And every time it places a word it filters the candidate lists
+of every slot crossing it. If one of those drops to zero options, it backs out right there
+rather than building further on a grid that cannot finish.</p>
+<p>How it hits a difficulty target is my favorite part of the whole thing, and it came out of an
+argument I lost to this robot.</p>
+<p>My instinct was to force it. Restrict the word pool so tightly that only an easy puzzle can
+come out the other side. Claude talked me out of it. Squeezing the pool that hard fights the
+solver, and a solver that cannot find a valid fill is a solver that runs forever.</p>
+<p>What we landed on instead is closer to rolling dice. Every word gets a random sort key
+divided by a weight based on its difficulty, so easy words tend to get tried first without
+rare words ever leaving the pool. The generator fills the grid, scores the average difficulty
+of what it produced, and if the number lands outside the band I asked for, it throws the
+entire puzzle away and starts over with a freshly shuffled pool. Each attempt takes a second
+or two. Rolling again is cheaper than negotiating.</p>
+<p>It started at 5×5. It handles up to 10×10 now.</p>
+<p>Once a puzzle is good it gets encrypted with AES-256-GCM before it ships, which is not real
+security and was never meant to be. The key is a passphrase sitting in the app, and anyone
+willing to open the binary will find it. It exists so tomorrow&#39;s answers are not sitting in
+plain text for anyone who thinks to open the file, which is the only threat I actually have.</p>
+<p>What I did not plan for is that none of this is inspectable by hand. You cannot eyeball
+103,128 words, and you cannot judge a puzzle by reading its JSON. So the generator grew a set
+of browser tools around it. Single page HTML, no build step, all of them written by Claude
+against a running list of complaints from me: an editor for swapping and rating clues, a
+reviewer for combing through the clue bank, a viewer that opens both encrypted and raw files,
+and a builder that assembles the generator&#39;s command line flags so I stop mistyping them. All
+keyboard driven, because I knew I would be living in them.</p>
+<p><figure class="figure figure--wide"><div class="ph"><span>The browser puzzle editor with a grid loaded</span></div><figcaption>The puzzle editor, one of four browser tools.</figcaption></figure></p>
+<h2 id="learning-to-ask"><a class="anchor" href="#learning-to-ask">Learning to ask</a></h2><p>The puzzles needed to live somewhere, and this is where the diagram started coming apart. I
+put them in a private GitHub repo.</p>
+<p>This was my first real use of git, and calling it a learning curve undersells it. I
+understood commits. I did not understand branches, or what merging actually did to my files,
+or why my terminal had opened vim and would not give it back.</p>
+<p>Then the app. I have started Xcode projects before and abandoned all of them. This one is a
+SwiftUI app of real size, and Claude wrote essentially all of it. Grid rendering that adapts
+to any size instead of assuming 5×5. Cell selection and the across/down toggle. The clue
+list. The timer, which waits for your first tap instead of starting on load. Stats and play
+state syncing through iCloud. The completion confetti.</p>
+<p>It designed the look, too. I said calm, pastel, something you would not mind looking at
+before you are properly awake, and then rejected options until one of them was right. The
+sage green, the rounded corners, the typefaces, the app icon. I set the direction and I threw
+a lot of it back.</p>
+<figure class="figure figure--wide">
+  <div class="gallery gallery--2"><div class="ph"><span>hero</span></div><div class="ph"><span>dark</span></div></div>
+  <figcaption>The same solved mini, light and dark.</figcaption>
+</figure><p>I spent most of that stretch somewhere between impressed and unsettled.</p>
+<p>It was not hands off. I rejected a lot, sent a lot back, and caught a fair number of things
+that looked right and were not. What I got better at over those weeks is the part that was
+actually mine: being specific about what I wanted, naming which files not to touch, checking
+the output instead of trusting it, and keeping the context small enough that the model still
+knew what project it was working on. Vague instructions produce a great deal of confident,
+wrong code.</p>
+<h2 id="what-actually-got-built"><a class="anchor" href="#what-actually-got-built">What actually got built</a></h2><figure class="figure figure--wide">
+  <div class="diagram"><svg viewBox="0 0 880 240" xmlns="http://www.w3.org/2000/svg" role="img"
+     aria-label="The architecture that shipped: a Node generator on a local machine writes encrypted JSON, a git push sends it to GitHub Pages which serves it as static files, and the iOS app fetches, decrypts and caches it. No API, no database, no authentication.">
+  <style>
+    .dg-box   { fill: var(--surface); stroke: var(--border); stroke-width: 1.5; }
+    .dg-eyebrow { font: 600 10.5px var(--sans); fill: var(--faint); letter-spacing: .09em; }
+    .dg-title { font: 600 17px var(--sans); fill: var(--text); }
+    .dg-line  { font: 400 13px var(--sans); fill: var(--muted); }
+    .dg-edge  { stroke: var(--faint); stroke-width: 1.5; fill: none; }
+    .dg-edgelabel { font: 400 11.5px var(--sans); fill: var(--faint); }
+  </style>  <defs>
+    <marker id="ga-end" viewBox="0 0 10 10" refX="9" refY="5"
+            markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+      <path d="M 0 0 L 10 5 L 0 10 z" fill="var(--faint)"/>
+    </marker>
+  </defs>  <rect class="dg-box" x="20" y="40" width="248" height="152" rx="4"/>
+  <text class="dg-eyebrow" x="42" y="72">MY DESK</text>
+  <text class="dg-title"   x="42" y="97">Generator</text>
+  <text class="dg-line"    x="42" y="126">Node. Clue bank in,</text>
+  <text class="dg-line"    x="42" y="148">solver, AES out.</text>
+  <text class="dg-line"    x="42" y="170">Encrypted JSON files.</text>  <line class="dg-edge" x1="272" y1="116" x2="312" y2="116" marker-end="url(#ga-end)"/>
+  <text class="dg-edgelabel" x="292" y="104" text-anchor="middle">push</text>  <rect class="dg-box" x="316" y="40" width="248" height="152" rx="4"/>
+  <text class="dg-eyebrow" x="338" y="72">HOSTING</text>
+  <text class="dg-title"   x="338" y="97">GitHub Pages</text>
+  <text class="dg-line"    x="338" y="126">Static files on a</text>
+  <text class="dg-line"    x="338" y="148">branch. Nothing</text>
+  <text class="dg-line"    x="338" y="170">running.</text>  <line class="dg-edge" x1="568" y1="116" x2="608" y2="116" marker-end="url(#ga-end)"/>
+  <text class="dg-edgelabel" x="588" y="104" text-anchor="middle">fetch</text>  <rect class="dg-box" x="612" y="40" width="248" height="152" rx="4"/>
+  <text class="dg-eyebrow" x="634" y="72">CLIENT</text>
+  <text class="dg-title"   x="634" y="97">iOS App</text>
+  <text class="dg-line"    x="634" y="126">Decrypt with CryptoKit,</text>
+  <text class="dg-line"    x="634" y="148">cache, render. Stats</text>
+  <text class="dg-line"    x="634" y="170">stay in iCloud.</text>
+</svg></div>
+  <figcaption>What shipped. Everything in the middle of the first diagram is gone.</figcaption>
+</figure><p>No API. No database. No auth, optional or otherwise. No leaderboard. No cron.</p>
+<p>The generator writes encrypted JSON files. I push them. GitHub Pages serves them as static
+files. The app downloads what it needs, decrypts it with CryptoKit and caches it, so once a
+puzzle is on your phone it works with no connection at all.</p>
+<p>Everything in the middle of that first diagram was infrastructure for problems I turned out
+not to have. There are no accounts, so there is nothing to authenticate. There is no
+leaderboard, so there is nothing to write to. The puzzles never change after I make them,
+which makes them files, and files do not need a database in front of them. Publishing is a
+git push.</p>
+<p>That unraveling is a key part of the project. I drew the first diagram before I knew
+which parts of this were going to be hard.</p>
+<p>I put it on TestFlight, which is Apple&#39;s beta platform, and handed it out to friends and
+family.</p>
+<p>They found things. Some were bugs. More were the kind you cannot see in your own app, where
+whatever is obvious to the person who built it turns out to be obvious to nobody else.
+Puzzles came back harder than the label I had put on them. The onboarding did not explain
+enough. There was friction in the input handling I had stopped noticing months earlier.</p>
+<p>Twenty builds later, Gridlet is under review for the App Store.</p>
+<p>It is free. No ads, no accounts, no analytics, nothing collected. A mini every day at 5×5,
+6×6 or 7×7, and a larger midi on Sundays and Wednesdays, all running on a repeating fourteen
+day schedule. There is an archive of everything already published, and a share format built
+around streaks rather than solve times, because nobody wants to broadcast how long a 5×5 took
+them. My wife has it on her phone. She is still faster than me.</p>
+<h2 id="conducting"><a class="anchor" href="#conducting">Conducting</a></h2><p>What this felt like, more than anything, was being a music conductor.</p>
+<p>I had a version of the song in my head. Each musician in front of me knew how to play their
+part better than I could play it. What was left for me was the shape of the whole thing and
+the seams between the parts, and the seams are where all the interesting problems were. The
+clue bank has to produce exactly what the generator expects. The generator has to produce
+exactly what the app can decrypt and render. Get one of those handoffs wrong and it stops
+mattering how well any single piece was written.</p>
+<p>Claude wrote code I could not read and would not have known was wrong. But it did not know
+the puzzle needed to be enjoyable at seven in the morning. Claude did not know ACETYL was the
+wrong answer even though it was a correct one. It never told me the leaderboard was a bad
+idea, because I never thought to ask. Those were mine, and they turned out to be most of the
+decisions that mattered.</p>
+<p>I have avoided adding up what I spent on Claude subscriptions and API credits to get out of a
+five dollar a month crossword subscription. I know roughly where the number is and I know which
+side of it I am on. I would do it again.</p>
+<p>Thanks for reading.</p>
 
     
   </div>
